@@ -54,20 +54,23 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({produc}) => {
     }, [CartProduct.slectedImg])
 
     const handleQtyIncrease = useCallback(() => {
-        if (CartProduct.quantity == 30){
-            return;
+        if (CartProduct.quantity < 30) {
+            setCartProduct((prev) => ({
+                ...prev,
+                quantity: prev.quantity + 1
+            }));
         }
-        setCartProduct((prev) => {
-            return {...prev, quantity: ++prev.quantity}
-        })
-    }, [CartProduct]);
+    }, [CartProduct.quantity]);
+    
     const handleQtyDecrease = useCallback(() => {
-        if (CartProduct.quantity == 1){
-            return;
+        if (CartProduct.quantity > 1) {
+            setCartProduct((prev) => ({
+                ...prev,
+                quantity: prev.quantity - 1
+            }));
         }
-        setCartProduct((prev) => {
-        return {...prev, quantity: --prev.quantity}
-    }); },[CartProduct])
+    }, [CartProduct.quantity]);
+    
     return ( <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
     <div>Images</div>
     <div className="flex flex-col gap-1 text-slate-500 text-sm">
