@@ -7,6 +7,7 @@ import SetQuantity from "../Component/SetQuantity";
 import Button from "../Component/Button";
 import ProductImg from "../Component/ProductImg";
 import product from "./[productid]/page";
+import { useCart } from "@/hooks/useCart";
 
 interface ProductDetailsProps{
     produc: any
@@ -33,7 +34,7 @@ const Horizontal = () =>{
     return <hr className="w-[30% ] my-2"/ >
 };
 const ProductDetails:React.FC<ProductDetailsProps> = ({produc}) => {
-
+   const {cartTotalQty} = useCart()
     const [CartProduct, setCartProduct] = useState<CartProductType>({
         id:produc.id,
         name:produc.name,
@@ -44,9 +45,12 @@ const ProductDetails:React.FC<ProductDetailsProps> = ({produc}) => {
         quantity:1,
         price:produc.price,
     })
-    /* console.log(CartProduct) */
+    
+    console.log(cartTotalQty)
+
     const productRating = produc.reviews.reduce((acc:number,item:any) => item.rating + acc, 0) / produc.reviews.length
-    console.log(productRating)
+    
+ 
 
     const handlColorSelect = useCallback((value:
         SelectedImgType

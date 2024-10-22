@@ -16,7 +16,6 @@ interface ProductCardProps{
 const ProductCard:React.FC<ProductCardProps> = ({data}) => {
     
     const productRating = data.reviews.reduce((acc:number,item:any) => item.rating + acc, 0) / data.reviews.length
-    console.log(productRating)
   const router = useRouter()
     return ( <div  onClick={() =>router.push(`/Product/${data.id}`)}className="col-span-1 cursor-pointer border-[1.2px] border-slate-200 bg-slate-50 p-2 transition hover:scale-105 text-content text-sm">
         <div className="flex flex-col items-center w-full gap-1">
