@@ -1,5 +1,6 @@
 import { CartProductType } from "@/app/Product/ProductDetails";
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 type CartContextType = {
     cartTotalQty: number;
@@ -14,19 +15,28 @@ interface Props {
 }
 
 export const CartContextProvider = (props: Props) => {
-    const [cartTotalQty, setCartTotalQty] = useState(10);
-    const [cartPs, setCartProducts] = useState<CartProductType[]>([]); // Initialize as an empty array
+    const [cartTotalQty, setCartTotalQty] = useState(0);
+    const [cartPs, setCartProducts] = useState<CartProductType[]>([]);
 
+    // Fetch cart products from localStorage on initial load
     useEffect(() => {
-        const cartItems: any = localStorage.getItem('dSquareCartItem');
-        const cPs: CartProductType[] = JSON.parse(cartItems) || []; // Default to an empty array if null
-        setCartProducts(cPs);
+        const cartItems = localStorage.getItem('dSquareCartItem');
+        const parsedCart: CartProductType[] = cartItems ? JSON.parse(cartItems) : [];
+        setCartProducts(parsedCart);
+        setCartTotalQty(parsedCart.reduce((total, product) => total + product.quantity, 0));
     }, []);
 
     const handleAddProductToCart = useCallback((product: CartProductType) => {
-        setCartProducts((prev) => {
-            const updatedCart = [...prev, product]; // Always create a new array
+        setCartProducts((prevCart) => {
+            const updatedCart = prevCart ? [...prevCart, product] : [product];
+            toast.success("Product added to cart");
             localStorage.setItem('dSquareCartItem', JSON.stringify(updatedCart));
+            
+
+            // Update the total quantity of items in the cart
+            const totalQty = updatedCart.reduce((total, product) => total + product.quantity, 0);
+            setCartTotalQty(totalQty);
+
             return updatedCart;
         });
     }, []);
